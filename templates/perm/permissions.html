@@ -1,0 +1,51 @@
+{% extends 'nav.html' %}
+
+{% load static %}
+
+{% block title %}
+{{title}}
+{% endblock title %}
+
+{% block content %}
+
+<script type='text/javascript' src="{% static 'js/catset.js' %}"></script>
+
+<div class="row w-auto mb-2 mt-2">
+    <div class="col-2 w-auto">
+        <h4>{{title}}</h4>
+    </div>
+</div>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ formset.management_form }}
+    <div class="row">
+        <div class="col-2"><strong>App</strong></div>
+        <div class="col-2"><strong>Desc</strong></div>
+        <div class="col-3"><strong>Code</strong></div>
+        <div class="col-2"><strong>Value</strong></div>
+    </div>
+
+  {% for form in formset %}
+  <div class="row form-row mt-2">
+      {{form.id}}
+      <div class="col-2">{{form.app}}</div>
+      <div class="col-2">{{form.desc}}</div>
+      <div class="col-3">{{form.code}}</div>
+      <div class="col-2">{{form.value}}</div>
+        <div class="col-2">
+            <button class="btn btn-danger remove-form-row">-</button>&nbsp;
+            <button class="btn btn-success add-form-row">+</button>
+        </div>
+  </div>
+
+  {% endfor %}
+  
+    <div class="d-grid gap-2 d-md-block mt-3">
+      <input class="btn btn-primary" type="submit" value="Update Permissions">
+    </div>
+
+</form>
+
+{% endblock content %}

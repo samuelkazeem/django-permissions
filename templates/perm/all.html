@@ -1,0 +1,113 @@
+{% extends 'nav.html' %}
+
+{% load static %}
+{% load tz %}
+
+{% block title %}
+{{title}}
+{% endblock title %}
+
+{% block content %}
+<script type="text/javascript" src="{% static 'js/select_all.js' %}"></script>
+
+<div class="row w-auto mb-2 mt-2">
+	<div class="col-2 w-auto">
+		<h4>{{title}}</h4>
+	</div>
+
+	<div class="col-2 w-auto">
+		<a href="{% url 'new-role' %}">
+			<input type="button" class="btn btn-outline-primary" name="add_new" value="Add New Role">
+		</a>
+	</div>
+</div>
+
+<form class="row g-3 position-relative me-auto mb-3" method="GET" action="{% url 'search-role' %}">
+	<div class="col">
+		<input type="text" class="form-control" name="role" placeholder="Role Name" value="{{rolename}}" required>
+	</div>
+	<div class="col">
+		<input type="submit" class="btn btn-primary" value="Search">
+	</div>
+		
+</form>
+
+<form method="POST" action="{% url 'all-roles' %}">
+	{% csrf_token %}
+	<div class="row position-relative me-auto mb-2">
+
+		<div class="col-3 w-auto">
+			<select  class="form-select" name="action" id="action" required>
+			  <option value="">Bulk Action</option>
+			  <option value="Delete">Delete</option>
+			</select>
+		</div>
+		<div class="col-3 gx-0">
+			<input type='submit' class="btn btn-secondary" value='Apply'>
+		</div>
+	</div>
+
+
+<div class="table-responsive">
+	<table class="table table-hover table-striped">
+
+		<thead class="table-dark">
+			<tr>
+				<th scope="col"><input type="checkbox" class="form-check-input" id="select-all"></th>
+				<th scope="col">Name</th>
+				<th scope="col">Created</th>
+				<th scope="col">Modified</th>
+			</tr>
+		</thead>
+
+	{% for role in roles %}
+
+	<tr>
+		<th scope="row"><input type="checkbox" class="form-check-input" name="selected_ids" value="{{ role.id }}"></th>
+		<td>
+		  <a class="btn btn-link" href="#" role="button" id="dropdown-item-link" data-bs-toggle="dropdown" aria-expanded="false">
+		    {{role.name}}
+		  </a>
+		  <ul class="dropdown-menu" aria-labelledby="dropdown-item-link">
+		    <li><a class="dropdown-item" href="{% url 'edit-role' role.id %}">Edit</a></li>
+		    <li><a class="dropdown-item" href="{% url 'delete-role' role.id %}">Delete</a></li>
+		  </ul>
+		</td>
+		<td>{{role.created}}</td>
+		<td>{{role.modified}}</td>
+	</tr>
+	{% endfor %}
+
+</table>
+</div>
+</form>
+
+{% if roles.has_other_pages %}
+
+	<div class="btn-group" role="group" aria-label="pagination buttons">
+
+		{% if roles.has_previous %}
+			<a href="?page={{ roles.previous_page_number }}&user={{username}}" type="button" class="btn btn-outline-primary">Prev</a>
+		{% else %}
+			<a href="#" type="button" class="btn btn-outline-primary disabled">Prev</a>
+		{% endif %}
+
+		{% for i in roles.paginator.page_range %}
+			{% if roles.number == i %}
+				<a href="#" type="button" class="btn btn-outline-primary active">{{ i }}</a>
+			{% else %}
+				<a href="?page={{ i }}&user={{username}}" type="button" class="btn btn-outline-primary">{{ i }}</a>
+			{% endif %}
+		{% endfor %}
+
+		{% if roles.has_next %}
+			<a href="?page={{ roles.next_page_number }}&user={{username}}" type="button" class="btn btn-outline-primary">Next</a>
+		{% else %}
+			<a href="#" type="button" class="btn btn-outline-primary disabled">Next</a>
+		{% endif %}
+
+	</div>
+
+{% endif %}
+
+{% endblock content %}

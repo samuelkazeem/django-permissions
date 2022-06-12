@@ -1,0 +1,67 @@
+{% extends 'nav.html' %}
+
+{% load static %}
+
+{% block title %}
+{{title}}
+{% endblock title %}
+
+{% block content %}
+
+<div class="row w-auto mb-2 mt-2">
+    <div class="col-2 w-auto">
+        <h4>{{title}}</h4>
+    </div>
+</div>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-lg-8">
+          <div class="form-floating mb-3">
+            {{form.name}}
+          <label for="id_name">{{form.name.label}}*</label>
+          </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+          <div class="form-floating mb-3">
+            {{form.default_home}}
+            <label for="id_default_home">{{form.default_home.label}}*</label>
+          </div>
+        </div>
+    </div>
+
+    {{ formset.management_form }}
+    <div class="row">
+        <div class="col-3"><strong>App</strong></div>
+        <div class="col-4"><strong>Permission</strong></div>
+        <div class="col-3"><strong>Value</strong></div>
+    </div>
+
+  {% for form in formset %}
+  <div class="row form-row mt-2">
+      {% if title == 'Edit Role' %}
+        {{form.id}}
+      {% endif %}
+
+      <div class="col-3">{{form.app}}</div>
+      <div class="col-4">{{form.desc}}</div>
+      {{form.code.as_hidden}}
+      <div class="col-3">{{form.value}}</div>
+
+  </div>
+
+  {% endfor %}
+  
+  <div class="d-grid gap-2 d-md-block mt-3">
+    <input class="btn btn-primary" type="submit" value='Save & Continue' name="save_continue">
+    <input class="btn btn-primary" type="submit" value='Save & Add Another' name="save_another">
+  </div>
+
+</form>
+
+{% endblock content %}
