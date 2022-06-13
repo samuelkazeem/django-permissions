@@ -1,7 +1,6 @@
 {% extends 'nav.html' %}
 
 {% load static %}
-{% load tz %}
 
 {% block title %}
 {{title}}
@@ -87,7 +86,7 @@
 	<div class="btn-group" role="group" aria-label="pagination buttons">
 
 		{% if roles.has_previous %}
-			<a href="?page={{ roles.previous_page_number }}&user={{username}}" type="button" class="btn btn-outline-primary">Prev</a>
+			<a href="?page={{ roles.previous_page_number }}&role={{rolename}}" type="button" class="btn btn-outline-primary">Prev</a>
 		{% else %}
 			<a href="#" type="button" class="btn btn-outline-primary disabled">Prev</a>
 		{% endif %}
@@ -96,12 +95,12 @@
 			{% if roles.number == i %}
 				<a href="#" type="button" class="btn btn-outline-primary active">{{ i }}</a>
 			{% else %}
-				<a href="?page={{ i }}&user={{username}}" type="button" class="btn btn-outline-primary">{{ i }}</a>
+				<a href="?page={{ i }}&role={{rolename}}" type="button" class="btn btn-outline-primary">{{ i }}</a>
 			{% endif %}
 		{% endfor %}
 
 		{% if roles.has_next %}
-			<a href="?page={{ roles.next_page_number }}&user={{username}}" type="button" class="btn btn-outline-primary">Next</a>
+			<a href="?page={{ roles.next_page_number }}&role={{rolename}}" type="button" class="btn btn-outline-primary">Next</a>
 		{% else %}
 			<a href="#" type="button" class="btn btn-outline-primary disabled">Next</a>
 		{% endif %}

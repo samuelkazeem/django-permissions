@@ -3,7 +3,6 @@ from django.urls import reverse, reverse_lazy
 from .models import Role, RolePerm, Permission
 from .forms import RoleForm, RoleFormset, PermFormset
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db.models import Q, ProtectedError
@@ -13,7 +12,6 @@ from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.db import SessionStore
 from django.utils import timezone
 from .calls import perm_required
-from django.conf import settings
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -47,7 +45,6 @@ def update_session_perm(role, perm_dict):
 				s = SessionStore(session_key=session.session_key)
 				s['perm'] = perm_dict
 				s.save()
-				# s.modified
 
 
 def update_roles(new_perms):
@@ -121,7 +118,8 @@ def permissions(request):
 			messages.success(request, 'Permissions Updated')
 			return redirect('all-perms')
 		else:
-			messages.error(request, formset.non_form_errors())
+			errors=formset.non_form_errors() if formset.non_form_errors() else formset.errors
+			messages.error(request, errors)
 
 	context = {'title':'User Permissions', 'formset':formset}
 	return render(request, 'perm/permissions.html', context)
