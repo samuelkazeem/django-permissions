@@ -4,7 +4,8 @@
 * Add *permissions* to settings INSTALLED_APPS
 * Add *permissions* to urls.py
 * Run *python manage.py migrate*
-* In your login script use *calls.get_perms* to set user permission.
+* In your login script use *calls.get_perms(request)* to set user permission.
+* In your views use *calls.perm_required('app_name', perm_code)* to check permissions.
 * Change *nav.html* to your base navigation file
 
 
